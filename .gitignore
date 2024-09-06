@@ -399,3 +399,5 @@ FodyWeavers.xsd
 
 #Angular
 /client/.angular/cache
+api/.db-shm
+api/.db-wal
