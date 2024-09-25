@@ -1,11 +1,11 @@
-<h1>{{title}}</h1>
-
-<ul>
-    <li *ngFor="let user of users">
-        {{user.id}} - {{user.userName}}
-    </li>
-<P>Otra forma de optener los mismos datos:</P>
-@for (user of users; track user.id) {
-    <li>{{user.id}} - {{user.userName}}</li>
-}
-</ul>
+<app-nav></app-nav>
+<div class="container" style="margin-top: 100px;">
+    <ul>
+        <!-- This is the new implementation of <li *ngFor="let user of users"> -->
+        @for (user of users; track user.id) {
+            <li>
+                {{user.id}} - {{user.userName}}
+            </li>
+        }
+    </ul>
+</div>
