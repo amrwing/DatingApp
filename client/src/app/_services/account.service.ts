@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { map, Observable, take } from 'rxjs';
-import { User } from '../models/User';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class AccountService {
   baseUrl = "https://localhost:5001/api/";
   currentUser = signal<User | null>(null);
 
-  login(model: any){
+  login(model: any):Observable <User | void >{
     return this.http.post<User>(this.baseUrl + "account/login", model).pipe(map(user => {
       if(user){
         localStorage.setItem("user",JSON.stringify(user));
