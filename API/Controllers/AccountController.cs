@@ -1,16 +1,20 @@
 using System.Security.Cryptography;
 using System.Text;
 using API.Data;
+using API.DTOs;
 using API.Entities;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class AccountController(DataContext context) : BaseApiController
+public class AccountController(
+    DataContext context,
+    ITokenService tokenService) : BaseApiController
 {
     [HttpPost("register")]
-    public async Task<ActionResult<AppUser>> RegisterAsync(DTOs.RegisterRequest request)
+    public async Task<ActionResult<UserResponse>> RegisterAsync(RegisterRequest request)
     {
         if (await UserExistsAsync(request.Username))
         {
@@ -26,18 +30,22 @@ public class AccountController(DataContext context) : BaseApiController
         };
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        return user;
+        return new UserResponse
+        {
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
     private async Task<bool> UserExistsAsync(string username) =>
         await context.Users.AnyAsync(
             u => u.UserName.ToLower() == username.ToLower()
         ); //PERMITE BUSCAR LA PRIMER COINCIDENCIA EN NOMBRES DE USUARIO
     [HttpPost("login")]
-    public async Task<ActionResult<AppUser>> LoginAsync(DTOs.LoginRequest request)
+    public async Task<ActionResult<UserResponse>> LoginAsync(LoginRequest request)
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == request.Username.ToLower());
         if (user == null)
-            return Unauthorized("Invalid username or ");
+            return Unauthorized("Invalid username or password");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
         var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
@@ -49,6 +57,10 @@ public class AccountController(DataContext context) : BaseApiController
 
             }
         }
-        return user;
+                return new UserResponse
+        {
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
 }
