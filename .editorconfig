@@ -182,6 +182,7 @@ csharp_style_unused_value_expression_statement_preference = discard_variable:non
 dotnet_diagnostic.IDE0058.severity = none
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 dotnet_diagnostic.IDE0059.severity = suggestion
+dotnet_diagnostic.IDE0055.severity = none
 
 ##########################################
 # Formatting Rules
