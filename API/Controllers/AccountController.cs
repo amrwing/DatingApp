@@ -19,14 +19,15 @@ public class AccountController(
         {
             return BadRequest("Username already in use");
         }
-
-        using var hmac = new HMACSHA512();
+        return Ok();
+        /*using var hmac = new HMACSHA512();
         var user = new AppUser
         {
             UserName = request.Username,
             PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password)),
             PasswordSalt = hmac.Key
-        };
+            
+     
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
@@ -36,6 +37,8 @@ public class AccountController(
             Username = user.UserName,
             Token = tokenService.CreateToken(user)
         };
+           };*/
+           
     }
 
     [HttpPost("login")]
