@@ -1,6 +1,7 @@
+namespace API.Data;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
-namespace API.Data;
+
 //PATTERNS USED
 //Unit of Work
 //Repository
