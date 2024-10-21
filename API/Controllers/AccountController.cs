@@ -3,7 +3,6 @@ using System.Security.Cryptography;
 using System.Text;
 using API.Data;
 using API.DTOs;
-using API.Entities;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +44,6 @@ public class AccountController(
     public async Task<ActionResult<UserResponse>> LoginAsync(LoginRequest request)
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == request.Username.ToLower());
-
         if (user == null)
         {
             return Unauthorized("Invalid username or password");

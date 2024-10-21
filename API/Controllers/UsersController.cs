@@ -9,36 +9,43 @@ namespace API.Controllers;
 [Authorize]
 public class UsersController : BaseApiController
 {
-    private readonly DataContext _context;
+    private readonly IUserRepository _repository;
 
-    public UsersController(DataContext context)
-    {
-        _context = context;
-    }
+    public UsersController(UserRepository repository) => _repository = repository;
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsersAsync()
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetAllAsync()
     {
-        var users = await _context.Users.ToListAsync();
+        var users = await _repository.GetAllAsync();
 
-        return users;
+        return Ok(users);
     }
 
     [Authorize]
     [HttpGet("{id:int}")] // api/users/2
-    public async Task<ActionResult<AppUser>> GetUsersByIdAsync(int id)
+    public async Task<ActionResult<AppUser>> GetByIdAsync(int id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _repository.GetByIdAsync(id);
 
-        if (user == null) return NotFound();
+        if (user == null)
+        {
+            return NotFound();
+        }
 
         return user;
     }
     
-    [HttpGet("{name}")] // api/users/Calamardo
-    public ActionResult<string> Ready(string name)
+    [HttpGet("{username}")] // api/users/Calamardo
+    public async Task<ActionResult<AppUser>> GetByIdAsync(string username)
     {
-        return $"Hi {name}";
+        var user = await _repository.GetByUsernameAsync(username);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return user;
     }
 }
