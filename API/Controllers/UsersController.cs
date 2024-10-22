@@ -1,57 +1,39 @@
 namespace API.Controllers;
 using API.Data;
 using API.DTOs;
-using API.Entities;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 [Authorize]
 public class UsersController : BaseApiController
 {
     private readonly IUserRepository _repository;
 
-    private readonly IMapper _mapper;
 
-    public UsersController(UserRepository repository, IMapper mapper) {
-        _repository = repository;
-        _mapper = mapper;
-        }
-
-    [AllowAnonymous]
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetAllAsync()
+    public UsersController(IUserRepository repository)
     {
-        var users = await _repository.GetAllAsync();
-    var response = _mapper.Map<IEnumerable<MemberResponse>>(users);
+        _repository = repository;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<MemberResponse>>> GetAllAsync()
+    {
+        var users = await _repository.GetMembersAsync();
+
+        
+
         return Ok(users);
     }
-
-    [Authorize]
-    [HttpGet("{id:int}")] // api/users/2
-    public async Task<ActionResult<MemberResponse>> GetByIdAsync(int id)
-    {
-        var user = await _repository.GetByIdAsync(id);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return  _mapper.Map<MemberResponse>(user);
-    }
-    
     [HttpGet("{username}")] // api/users/Calamardo
-    public async Task<ActionResult<MemberResponse>> GetByIdAsync(string username)
+    public async Task<ActionResult<MemberResponse>> GetByUsernameAsync(string username)
     {
-        var user = await _repository.GetByUsernameAsync(username);
+        var member = await _repository.GetMemberAsync(username);
 
-        if (user == null)
+        if (member == null)
         {
             return NotFound();
         }
 
-       return  _mapper.Map<MemberResponse>(user);
+        return member;
     }
 }
