@@ -4,25 +4,34 @@ using System.Net;
 using System.Text.Json;
 using API.Errors;
 
-public class ExceptionMiddleware(RequestDelegate next, 
-ILogger<ExceptionMiddleware> logger, 
-IHostEnvironment env)
+public class ExceptionMiddleware(
+    RequestDelegate next,
+    ILogger<ExceptionMiddleware> logger,
+    IHostEnvironment env)
 {
-    private readonly JsonSerializerOptions serializer = new()
+    public async Task InvokeAsync(HttpContext context)
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
-    public async Task InvokeAsync(HttpContext context){
-        try{
+        try
+        {
             await next(context);
-        }catch(Exception ex){
-            logger.LogError(ex,ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, ex.Message);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
             var response = env.IsDevelopment()
-            ? new ApiException(context.Response.StatusCode,ex.Message, ex.StackTrace) : new ApiException(context.Response.StatusCode, ex.Message, "Internal Server error");
-            var options = serializer;
-            var json = JsonSerializer.Serialize(response,options);
+                ? new ApiException(context.Response.StatusCode, ex.Message, ex.StackTrace)
+                : new ApiException(context.Response.StatusCode, ex.Message, "Internal Server Error");
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var json = JsonSerializer.Serialize(response, options);
+
             await context.Response.WriteAsync(json);
         }
     }

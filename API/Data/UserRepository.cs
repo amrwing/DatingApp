@@ -32,7 +32,13 @@ public class UserRepository(DataContext context,IMapper mapper) : IUserRepositor
     public async Task<IEnumerable<MemberResponse>> GetMembersAsync() =>  await context.Users
     .ProjectTo<MemberResponse>(mapper.ConfigurationProvider)
     .ToListAsync();
-    Task<IEnumerable<AppUser>> IUserRepository.GetAllAsync() => throw new NotImplementedException();
-    Task<AppUser> IUserRepository.GetByIdAsync(int id) => throw new NotImplementedException();
-    Task<AppUser> IUserRepository.GetByUsernameAsync(string username) => throw new NotImplementedException();
+    async Task<IEnumerable<AppUser>> IUserRepository.GetAllAsync() =>  await context.Users
+                .Include(u => u.Photos)
+                .ToListAsync();
+    async Task<AppUser> IUserRepository.GetByIdAsync(int id) => await context.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.Id == id);
+    async Task<AppUser> IUserRepository.GetByUsernameAsync(string username) => await context.Users
+                .Include(u => u.Photos)
+                .SingleOrDefaultAsync(u => u.UserName == username);
 }
