@@ -28,7 +28,7 @@ ngOnInit(): void {
 this.loadMember();
 }
 member?: Member;
-private accountService = inject(AccountService);
+public accountService = inject(AccountService);
 private membersService = inject(MembersService);
 private toastr = inject(ToastrService);
 loadMember(){
