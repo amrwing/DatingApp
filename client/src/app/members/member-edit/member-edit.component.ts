@@ -46,5 +46,8 @@ updateMember() {
     }
   });
 }
+onMemberChange(event: Member) {
+  this.member = event;
+}
 }
 
