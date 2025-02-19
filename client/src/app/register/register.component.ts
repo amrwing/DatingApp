@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TextInputComponent } from "../_forms/text-input/text-input.component";
 import { JsonPipe, NgIf } from '@angular/common';
 import { DatePickerComponent } from "../_forms/date-picker/date-picker.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,9 @@ import { DatePickerComponent } from "../_forms/date-picker/date-picker.component
 })
 export class RegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private router = inject(Router);
+  validationErrors: string[] | undefined;
+
   ngOnInit(): void {
     this.initializeForm();
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
@@ -30,7 +34,7 @@ export class RegisterComponent implements OnInit {
       gender: ["female"],
       username: ["", Validators.required],
       knownAs: ["", Validators.required],
-      dateOfBirth: ["", Validators.required],
+      birthDay: ["", Validators.required],
       city: ["", Validators.required],
       country: ["", Validators.required],
       password: ["", [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
@@ -51,19 +55,18 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup = new FormGroup({});
 
   register(): void {
-    console.log(this.registerForm.value);
-    // this.accountService.register(this.model).subscribe({
-    //   next: (response) => {
-    //     console.log(response);
-    //     this.cancel();
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //     this.toastr.error(error.errors);
-    //   }
-    // });
-  }
+    const bd = this.getDateOnly(this.registerForm.get("birthDay")?.value);
+    this.registerForm.patchValue({ birthDay: bd });
+    this.accountService.register(this.model).subscribe({
+      next: () => this.router.navigateByUrl("/members"),
+      error: (error) => this.validationErrors = error
+    });
 
+  }
+  private getDateOnly(birthDay: string | undefined) {
+    if (!birthDay) return;
+    return new Date(birthDay).toISOString().slice(0, 10);
+  }
   cancel(): void{
    this.cancelRegister.emit(false);
   }
