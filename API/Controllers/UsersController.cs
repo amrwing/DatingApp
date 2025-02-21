@@ -80,6 +80,13 @@ public class UsersController : BaseApiController
             Url = result.SecureUrl.AbsoluteUri,
             PublicId = result.PublicId
         };
+
+
+
+        if (user.Photos.Count == 0)
+        {
+            photo.IsMain = true;
+        }
         if(await _repository.SaveAllAsync()
         )
         {

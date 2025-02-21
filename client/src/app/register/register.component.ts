@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, TextInputComponent, DatePickerComponent],
-  templateUrl: './register.component.html',
+
+  imports: [ReactiveFormsModule, TextInputComponent, DatePickerComponent],
+    templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
@@ -49,8 +50,8 @@ export class RegisterComponent implements OnInit {
   private accountService = inject(AccountService);
   //usersFromHomeComponent = input.required<any>();
   cancelRegister = output<boolean>();
-  private toastr = inject(ToastrService);
   maxDate = new Date();
+  
   model: any = {};
   registerForm: FormGroup = new FormGroup({});
 
