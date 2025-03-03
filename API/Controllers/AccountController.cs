@@ -65,6 +65,7 @@ public class AccountController(
             Username = user.UserName,
             Token = tokenService.CreateToken(user),
             KnownAs = user.KnownAs,
+            Gender = user.Gender
             PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         };
     }

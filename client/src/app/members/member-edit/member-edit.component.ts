@@ -1,7 +1,7 @@
 import { Component, HostListener, inject, OnInit, ViewChild, viewChild } from '@angular/core';
 import { AccountService } from '../../_services/account.service';
 import { MembersService } from '../../_services/members.service';
-import { Member } from '../../models/member';
+import { Member } from '../../_models/member';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { FormsModule, NgForm } from '@angular/forms';
@@ -34,9 +34,9 @@ private toastr = inject(ToastrService);
 loadMember(){
   const user = this.accountService.currentUser();
   if(!user) return;
-  this.membersService.getMember(user.username).subscribe({
-    next: member => this.member = member
-  });
+  // this.membersService.getMember(user.username).subscribe({
+  //   next: member => this.member = member
+  // });
 } 
 updateMember() {
   this.membersService.updateMember(this.editForm?.value).subscribe({
