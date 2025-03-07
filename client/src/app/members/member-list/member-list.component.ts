@@ -27,15 +27,15 @@ export class MemberListComponent implements OnInit{
   }
   }
   resetFilters() {
-    this.userParams = new UserParams(this.accountService.currentUser());
-    this.loadMembers();
+    this.membersService.resetUserParams();
+        this.loadMembers();
   }
   loadMembers(){
-    this.membersService.getMembers(this.userParams);
-   }
+    this.membersService.getMembers();
+     }
     pageChanged(event: any) {
-      if (this.userParams.pageNumber !== event.page) {
-        this.userParams.pageNumber = event.page;
+      if (this.membersService.userParams().pageNumber !== event.page) {
+        this.membersService.userParams().pageNumber = event.page;
         this.loadMembers();
       }
     }
