@@ -5,13 +5,14 @@ import { Member } from '../../_models/member';
 import { AccountService } from '../../_services/account.service';
 import { FormsModule } from '@angular/forms';
 import { UserParams } from '../../_models/userParams';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { MemberCardComponent } from "../member-card/member-card.component";
 
 @Component({
   selector: 'app-member-list',
   standalone: true,
-  imports: [MemberCardComponent, PaginationModule, FormsModule],
-    templateUrl: './member-list.component.html',
+  imports: [MemberCardComponent, PaginationModule, FormsModule, ButtonsModule],    
+  templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css'
 })
 export class MemberListComponent implements OnInit{
