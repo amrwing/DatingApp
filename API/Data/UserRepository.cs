@@ -16,9 +16,9 @@ public class UserRepository(DataContext context,IMapper mapper) : IUserRepositor
                 .Include(u => u.Photos)
                 .ToListAsync();
     public async Task<AppUser?> GetByIdAsync(int id)
-        => await context.Users
-                .Include(u => u.Photos)
-                .FirstOrDefaultAsync(u => u.Id == id);
+        =>      await context.Users.FindAsync(id);
+                //.Include(u => u.Photos)
+                //.ToListAsync();
     public async Task<AppUser?> GetByUsernameAsync(string username)
         => await context.Users
                 .Include(u => u.Photos)
