@@ -8,13 +8,15 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Gallery, GalleryModule } from 'ng-gallery';
 import { ToastrService } from 'ngx-toastr';
 import { PhotoEditorComponent } from "../photo-editor/photo-editor.component";
+import { DatePipe } from '@angular/common';
+import { TimeagoModule } from 'ngx-timeago';
 
 
 @Component({
   selector: 'app-member-edit',
   standalone: true,
-  imports: [TabsModule, FormsModule, PhotoEditorComponent],
-  templateUrl: './member-edit.component.html',
+  imports: [TabsModule, FormsModule, PhotoEditorComponent, TimeagoModule, DatePipe],
+    templateUrl: './member-edit.component.html',
   styleUrl: './member-edit.component.css'
 })
 export class MemberEditComponent implements OnInit{
@@ -34,9 +36,9 @@ private toastr = inject(ToastrService);
 loadMember(){
   const user = this.accountService.currentUser();
   if(!user) return;
-  // this.membersService.getMember(user.username).subscribe({
-  //   next: member => this.member = member
-  // });
+  this.membersService.getMember(user.username).subscribe({
+    next: member => this.member = member
+  })
 } 
 updateMember() {
   this.membersService.updateMember(this.editForm?.value).subscribe({

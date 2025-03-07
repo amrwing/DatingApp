@@ -7,7 +7,8 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 import { errorInterceptor } from './_interceptors/error.interceptor';
 import { jwtInterceptor } from './_interceptors/jwt.interceptor';
-import { NgxSpinner } from 'ngx-spinner';
+import { TimeagoModule } from 'ngx-timeago';
+import { NgxSpinner, NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from './_interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
       positionClass: "toast-bottom_right",
     }),
     importProvidersFrom(NgxSpinner),
+    importProvidersFrom(NgxSpinnerModule, TimeagoModule.forRoot()),
     {
       provide: GALLERY_CONFIG,
       useValue: {
