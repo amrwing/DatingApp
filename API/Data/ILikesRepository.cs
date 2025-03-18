@@ -1,17 +1,11 @@
 namespace API.Data;
- 
 
-
- 
-
+using API.Controllers;
 using API.DataEntities;
  
 
 using API.DTOs;
- 
-
-
- 
+using API.Helpers;
 
 public interface ILikesRepository
  
@@ -34,6 +28,7 @@ public interface ILikesRepository
  
 
     public Task<bool> SaveChangesAsync();
+        public Task<PagedList<MemberResponse>> GetUserLikesAsync(LikesParams likesParams);
  
 
 
