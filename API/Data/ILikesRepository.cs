@@ -28,8 +28,7 @@ public interface ILikesRepository
     public Task<IEnumerable<int>> GetCurrentUserLikeIdsAsync(int currentUSerId);
  
 
-    public void DeleteLike(UserLike like);
- 
+    public void RemoveLike(UserLike like); 
 
     public void AddLike(UserLike like);
  
