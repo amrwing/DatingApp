@@ -31,8 +31,7 @@ public interface IMessageRepository
     public Task<Message?> GetAsync(int id);
  
 
-    public Task<PagedList<MessageResponse>> GetForUserAsync();
- 
+    public Task<PagedList<MessageResponse>> GetForUserAsync(MessageParams messageParams); 
 
     public Task<IEnumerable<MessageResponse>> GetThreadAsync(string currentUsername, string recipientUsername);
  
