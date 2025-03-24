@@ -28,8 +28,7 @@ public class MessageResponse
     public required string RecipientUsername { get; set; }
  
 
-    public required string RecipienPhotoUrl { get; set; }
- 
+ public required string RecipientPhotoUrl { get; set; } 
 
     public required string Content { get; set; }
  
