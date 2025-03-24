@@ -27,7 +27,9 @@
                     class="form-select ms-1"
                     [(ngModel)]="userParams.gender">
                     @for (gender of genderList; track gender.value) {
-                        <option [value]="gender.value">{{gender.display}}</option>
+                        <option [value]="gender.value">{{gender.display}}
+        
+                        </option>
                     }
                 </select>
             </div>
