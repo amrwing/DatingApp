@@ -82,7 +82,7 @@ public class MessagesController
         }
 
         if (message.SenderUsername != username && message.RecipientUsername != username)
-                {
+                        {
             return Forbid();
         }
 
