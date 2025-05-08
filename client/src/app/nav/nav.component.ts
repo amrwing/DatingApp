@@ -9,8 +9,8 @@ import { TitleCasePipe } from '@angular/common';
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [FormsModule,BsDropdownModule,RouterLink,RouterLinkActive,TitleCasePipe],
-  templateUrl: './nav.component.html',
+  imports: [FormsModule, BsDropdownModule, RouterLink, RouterLinkActive],
+    templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
 export class NavComponent {

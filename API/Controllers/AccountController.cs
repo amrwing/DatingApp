@@ -30,6 +30,7 @@ public class AccountController(
                 await context.SaveChangesAsync();
                         return new UserResponse
         {
+            Gender = user.Gender,
             Username = user.UserName,
             Token = tokenService.CreateToken(user),
             KnownAs = user.KnownAs
@@ -65,6 +66,7 @@ public class AccountController(
             Username = user.UserName,
             Token = tokenService.CreateToken(user),
             KnownAs = user.KnownAs,
+            Gender = user.Gender,
             PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
         };
     }
