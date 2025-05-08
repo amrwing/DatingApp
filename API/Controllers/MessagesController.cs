@@ -7,8 +7,10 @@ using API.DTOs;
 using API.Extensions;
 using API.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize]
 public class MessagesController
     (IMessageRepository messageRepository,
     IUserRepository userRepository,
@@ -60,20 +62,50 @@ public class MessagesController
         Response.AddPaginationHeader(messages);
         return messages;
     }
-       [HttpGet("thread/{username}")]
- 
 
+    [HttpGet("thread/{username}")]
     public async Task<ActionResult<IEnumerable<MessageResponse>>> GetMessageThread(string username)
- 
-
     {
- 
-
         var currentUsername = User.GetUserName();
- 
-
         return Ok(await messageRepository.GetThreadAsync(currentUsername, username));
- 
+    }
 
-    } 
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteMessage(int id)
+    {
+        var username = User.GetUserName();
+        var message = await messageRepository.GetAsync(id);
+
+        if (message == null)
+        {
+            return BadRequest("Can't delete the message");
+        }
+
+        if (message.SenderUsername != username || message.RecipientUsername != username)
+        {
+            return Forbid();
+        }
+
+        if (message.SenderUsername == username)
+        {
+            message.SenderDeleted = true;
+        }
+
+        if (message.RecipientUsername == username)
+        {
+            message.RecipientDeleted = true;
+        }
+
+        if (message is { SenderDeleted: true, RecipientDeleted: true })
+        {
+            messageRepository.Remove(message);
+        }
+
+        if (await messageRepository.SaveAllAsync())
+        {
+            return Ok();
+        }
+
+        return BadRequest("There was an issue");
+    }
 }
