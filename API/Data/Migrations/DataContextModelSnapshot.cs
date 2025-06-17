@@ -229,8 +229,8 @@ namespace API.Data.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Groups");
-                });
+                    b.ToTable("MessageGroups");
+                                    });
 
             modelBuilder.Entity("API.DataEntities.Photo", b =>
                 {
