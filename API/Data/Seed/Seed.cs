@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
     [ExcludeFromCodeCoverage]
 public class Seed
 {
-    public static async Task SeedUsersAsync(DataContext context)
+    public static async Task SeedUsersAsync(Microsoft.AspNetCore.Identity.UserManager<DataEntities.AppUser> userManager, DataContext context)
     {
         if (await context.Users.AnyAsync())
         {
