@@ -1,7 +1,8 @@
-import { Component, computed, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { Member } from '../../_models/member';
 import { RouterLink } from '@angular/router';
 import { LikesService } from '../../_services/likes.service';
+import { PresenceService } from '../../_services/presence.service';
 
 @Component({
   selector: 'app-member-card',
@@ -9,9 +10,15 @@ import { LikesService } from '../../_services/likes.service';
   imports: [RouterLink],
   templateUrl: './member-card.component.html',
   styleUrl: './member-card.component.css',
+  encapsulation: ViewEncapsulation.None
 })
-export class MemberCardComponent implements OnInit{
+export class MemberCardComponent {
+  private likesService = inject(LikesService);
+  private presenceService = inject(PresenceService);
+  member = input.required<Member>();
   hasLiked = computed(() => this.likesService.likeIds().includes(this.member().id));
+  isOnline = computed(() => this.presenceService.onlineUsers().includes(this.member().userName));
+
   toogleLike() {
     this.likesService.toogleLike(this.member().id).subscribe({
       next: () => {
@@ -23,10 +30,4 @@ export class MemberCardComponent implements OnInit{
       }
     });
   }
-  private likesService = inject(LikesService);
-  ngOnInit(): void {
-    console.log("member:"+this.member);
-  }
-  member = input.required<Member>();
-  
 }

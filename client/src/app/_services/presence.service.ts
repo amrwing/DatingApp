@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,7 @@ export class PresenceService {
   hubsUrl = environment.hubsUrl;
   private hubConnection?: HubConnection;
   private toastr = inject(ToastrService);
+  onlineUsers = signal<string[]>([]);
 
   createHubConnection(user: User) {
     this.hubConnection = new HubConnectionBuilder()
@@ -26,7 +27,10 @@ export class PresenceService {
     });
     this.hubConnection.on("UserIsOffline", username => {
       this.toastr.warning(username + " went out to touch some grass!")
-        });
+    });
+    this.hubConnection.on("GetOnlineUsers", usernames => {
+      this.onlineUsers.set(usernames)
+    });
   }
 
   stopHubConnection() {
@@ -34,4 +38,4 @@ export class PresenceService {
       this.hubConnection.stop().catch(error => console.log(error));
     }
   }
-}   
+}
